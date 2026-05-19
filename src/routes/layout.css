@@ -1,1 +1,41 @@
 @import 'tailwindcss';
+
+
+@theme {
+    --color-bg: #2E2E2E;
+    --color-surface:#383838;
+    --color-card:#424242;
+    --color-text: #F0EDE8;
+    --color-muted:#A8A49E;
+
+    --color-mint:#B8D8C8;
+    --color-lavender:#C4B8D8;
+    --color-peach:#D8C4B8;
+    --color-sky:#b8ced8;
+    
+    --color-border: rgba(255,255,255,0.08);
+    --color-border-strong: rgba(255,255,255,0.12);
+
+    --font-sans:'Inter', system-ui, sans-serif;
+    --font-mono:'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+body {
+    @apply bg-bg text-text font-sans;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Geist Mono';
+    src: url('/fonts/Geist_Mono/GeistMono-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
