@@ -88,3 +88,14 @@ main.terms section .content dl div dt {
 main.terms section .content dl div dd {
     @apply m-0 text-[13px] text-muted leading-[1.65]
 }
+
+@keyframes modal-in {
+    0% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
