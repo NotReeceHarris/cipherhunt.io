@@ -4,20 +4,25 @@
 
     let todaysCipherId = 142;
     let todaysCipher = 'WKH RQOB WKLQJ ZH KDYH WRIHDU LV IHDU LWVHOI WKH RQOB WKLQJ ZH KDYH WRIHDU LV IHDU LWVHOI WKH RQOB WKLQJ ZH KDYH WRIHDU LV IHDU LWVHOI'
-
     let todaysSolvedCount = 847;
     let todaysStuckCount = 412;
 
     let todaysSolveRate = todaysSolvedCount > 0 ? ((todaysSolvedCount / (todaysSolvedCount + todaysStuckCount)) * 100).toFixed(0) : '0'
 
     let attempts = [
-        { attempted: true, answer: 'the quick brown fox jumps over the lazy dog', correct: false },
-        { attempted: true, answer: 'we have nothing to fear but fear itself', correct: false },
         { attempted: false, answer: '', correct: false },
         { attempted: false, answer: '', correct: false },
         { attempted: false, answer: '', correct: false },
-        { attempted: false, answer: '', correct: false }
+        { attempted: false, answer: '', correct: false },
+        { attempted: false, answer: '', correct: false },
+        { attempted: false, answer: '', correct: false },
     ]
+
+    let answer: string = $state('');
+
+    $effect(() => {
+        answer = answer.toLowerCase();
+    });
 
 </script>
 
@@ -26,14 +31,16 @@
         <div class="font-mono text-[10px] text-muted tracking-widest opacity-70 shrink-0">
             {num.toString().padStart(2, '0')}
         </div>
-        <div class="flex-[1_1_0%] font-mono text-[13px] {correct ? 'text-text' : 'text-muted'} whitespace-nowrap overflow-hidden text-ellipsis tracking-[0.02em]">
-            {anwser}
-        </div>
         {#if attempted}
+            <div class="flex-[1_1_0%] font-mono text-[13px] {correct ? 'text-text' : 'text-muted'} whitespace-nowrap overflow-hidden text-ellipsis tracking-[0.02em]">
+                {anwser}
+            </div>
             <div class="shrink-0 inline-flex items-center gap-1.25 text-[11px] font-medium py-1 px-2.25 rounded-md border-[0.5px] {correct ? 'bg-mint/18 border-mint/36 text-mint' : 'bg-white/3 border-border text-muted'} font-sans tracking-[0.02em]">
                 <span>{correct ? '✓' : '✗'}</span>
                 <span>{correct ? 'correct' : 'wrong'}</span>
             </div>
+        {:else}
+            <div class="flex-[1_1_0%] h-px bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.08)_0px,rgba(255,255,255,0.08)_4px,transparent_4px,transparent_8px)]"></div>
         {/if}
     </div>
 {/snippet}
@@ -112,7 +119,7 @@
 </div>
 
 
-<div class="flex flex-col gap-2 bg-surface border-[0.5px] border-border rounded-md px-4 pt-4 pb-4.5">
+<section class="flex flex-col gap-2 bg-surface border-[0.5px] border-border rounded-md px-4 pt-4 pb-4.5">
 
     <div class="text-[11px] tracking-widest uppercase text-muted font-medium pt-px px-0.5 pb-1">
         <span>Attempts</span>
@@ -149,6 +156,33 @@
             {/each}
         </div>
 
+    </div>
+
+</section>
+
+<div class="flex flex-col gap-1.5">
+
+    <div class="flex items-center gap-2 bg-card border border-border-strong rounded-md py-1.5 px-1.5 pl-3.5">
+        <input bind:value={answer} type="text" name="answer" id="answer" class="flex-[1_1_0%] min-w-0 appearance-none outline-none bg-transparent py-2 font-mono text-[14px] text-text tracking-[0.02em]" placeholder="Type your answer here...">
+        <button class="appearance-none border-[0.5px]  rounded-md py-2 px-3.5 font-mono text-[12px] font-medium tracking-[0.03em] inline-flex items-center gap-1.5 transition-colors whitespace-nowrap {answer ? 'cursor-pointer border-mint/36 bg-mint/16 text-mint' : 'cursor-default bg-transparent border-border text-muted'}">
+            <span>
+                submit
+            </span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; flex-shrink: 0;" data-om-id="jsx:/https:/cf29dfbe-6a21-46d5-bcff-383c3e39d5bb.claudeusercontent.com/v1/design/projects/cf29dfbe-6a21-46d5-bcff-383c3e39d5bb/serve/app.jsx:335:9:3"><path d="M5 12h14M13 6l6 6-6 6" data-om-id="jsx:/https:/cf29dfbe-6a21-46d5-bcff-383c3e39d5bb.claudeusercontent.com/v1/design/projects/cf29dfbe-6a21-46d5-bcff-383c3e39d5bb/serve/app.jsx:1994:62:5"></path></svg>
+        </button>
+    </div>
+
+    <div class="flex justify-between items-center px-0.5">
+        <div class="text-[11px] text-muted">
+            <span>
+                Press Enter to submit · max 10 words
+            </span>
+        </div>
+        <div class="font-mono text-[10px] tracking-[0.04em] text-muted opacity-50 whitespace-nowrap transition-colors">
+            <span>
+                {answer.length ? answer.trim().split(' ').length : '0'}/10 words
+            </span>
+        </div>
     </div>
 
 </div>

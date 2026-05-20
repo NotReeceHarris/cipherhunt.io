@@ -1,5 +1,5 @@
 <script lang="ts">
-	import './layout.css';
+	import '../layout.css';
 	import moment from 'moment';
 	import favicon from '$lib/assets/favicon.svg';
 	import { onMount } from 'svelte';
@@ -43,9 +43,9 @@
 
 		<nav class="grid grid-cols-[1fr_auto_1fr] items-center pt-4.5 px-1 pb-5.5 gap-3">
 
-			<div class="font-mono font-medium text-[15px] tracking-[-0.01em] justify-self-start">
+			<a href="https://cipherhunt.io" class="font-mono font-medium text-[15px] tracking-[-0.01em] justify-self-start">
 				<span>cipher</span><span class="text-mint">hunt</span><span class="text-muted">.io</span>
-			</div>
+			</a>
 
 			<div class="justify-self-center">
 				<div class="inline-flex items-center gap-1.5 py-1.25 px-2.5 bg-sky/8 border-[0.5px] border-sky/22 rounded-md text-sky font-mono text-[12px] font-normal tracking-[0.04em] whitespace-nowrap">
@@ -68,6 +68,18 @@
 
 		<main class="flex flex-col gap-5.5">
 			{@render children()}
+
+			<footer class="flex justify-between pt-4 text-[11px] text-muted">
+				<span>
+					cipherhunt.io &copy; {new Date().getFullYear()}. All rights reserved.
+				</span>
+				<span>
+					<a href="/privacy" class="underline hover:text-mint/80">privacy policy</a> 
+					· 
+					<a href="/terms" class="underline hover:text-mint/80">terms of service</a>
+				</span>
+			</footer>
+
 		</main>
 	</div>
 </div>

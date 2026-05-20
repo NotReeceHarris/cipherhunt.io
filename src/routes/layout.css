@@ -39,3 +39,52 @@ body {
     font-style: normal;
     font-display: swap;
 }
+
+main.terms section:first-child {
+    @apply pt-0
+}
+
+main.terms section .content p {
+    @apply mb-3 text-muted text-[14px] leading-[1.75];
+}
+
+main.terms section .content p:last-child {
+    @apply mb-0;
+}
+
+main.terms section .content ul {
+    @apply mt-1.5 mb-3.5 pl-0 list-none flex flex-col gap-2
+}
+
+main.terms section .content ul li {
+    @apply text-[14px] text-muted leading-[1.7] pl-5.5 relative
+}
+
+main.terms section .content ul li::before {
+    content: '';
+    @apply absolute left-1.5 top-[0.7em] w-1.25 h-[0.5px] bg-muted/50
+}
+
+main.terms section .content div.callout {
+    @apply bg-mint/5 border-[0.5px] border-mint/20 border-l-2 border-l-mint rounded-r-sm py-3 px-3.5 mt-3.5 mb-1 text-[13px] text-text leading-[1.65]
+}
+
+main.terms section .content div.callout span.label {
+    @apply font-mono text-[10px] tracking-widest uppercase text-mint mb-1 block
+}
+
+main.terms section .content dl {
+    @apply mt-2 mb-1 bg-card border-[0.5px] border-border rounded-md overflow-hidden
+}
+
+main.terms section .content dl div {
+    @apply grid grid-cols-[140px_1fr] gap-3.5 py-2.75 px-3.5 border-[0.5px] border-border
+}
+
+main.terms section .content dl div dt {
+    @apply font-mono text-[12px] text-text/70 tracking-[0.02em]
+}
+
+main.terms section .content dl div dd {
+    @apply m-0 text-[13px] text-muted leading-[1.65]
+}
