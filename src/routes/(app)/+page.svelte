@@ -3,7 +3,7 @@
     import moment from 'moment';
 
     let todaysCipherId = 142;
-    let todaysCipher = 'WKH RQOB WKLQJ ZH KDYH WRIHDU LV IHDU LWVHOI WKH RQOB WKLQJ ZH KDYH WRIHDU LV IHDU LWVHOI WKH RQOB WKLQJ ZH KDYH WRIHDU LV IHDU LWVHOI'
+    let todaysCipher = 'wklv zdv dq hdvb rqh wkhuh jrlqj wr jhw kdughu';
     let todaysSolvedCount = 847;
     let todaysStuckCount = 412;
 
@@ -175,12 +175,12 @@
     <div class="flex justify-between items-center px-0.5">
         <div class="text-[11px] text-muted">
             <span>
-                Press Enter to submit · max 10 words
+                Press Enter to submit
             </span>
         </div>
         <div class="font-mono text-[10px] tracking-[0.04em] text-muted opacity-50 whitespace-nowrap transition-colors">
             <span>
-                {answer.length ? answer.trim().split(' ').length : '0'}/10 words
+                {answer.length ? answer.trim().length : '0'} characters
             </span>
         </div>
     </div>

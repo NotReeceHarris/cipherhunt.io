@@ -15,6 +15,7 @@
 			"binding": "DB",
 			"database_name": "cipherhunt-io",
 			"database_id": "60c5d86b-0b7f-45bc-a488-ae039b59242f",
+			"remote": true,
 			"migrations_dir": "drizzle"
 		}
 	]

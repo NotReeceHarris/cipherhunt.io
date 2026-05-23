@@ -6,6 +6,8 @@
     let lastUpdated = new Date('2024-01-01T00:00:00Z');
     let effectiveDate = new Date('2024-02-01T00:00:00Z');
 
+    // TODO: mention https://www.cloudflare.com/en-gb/turnstile-privacy-policy/ somewhere in the policy, and link to it here
+
     let content = [
         {
             title: 'Introduction',
