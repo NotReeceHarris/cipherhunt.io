@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { TURNSTILE_SECRET_KEY } from "$env/static/private";
+import { env } from '$env/dynamic/private';
 
 export const actions = {
     default: async ({ request, locals }) => {
@@ -28,7 +28,7 @@ export const actions = {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: new URLSearchParams({
-                secret: TURNSTILE_SECRET_KEY,
+                secret: env.TURNSTILE_SECRET_KEY,
                 response: turnstileToken
             })
         }).then(async res => {

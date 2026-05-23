@@ -1,4 +1,4 @@
-import { TURNSTILE_SITE_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 export const load = async ({ locals, request }) => {
 
@@ -7,7 +7,7 @@ export const load = async ({ locals, request }) => {
     })
 
     return {
-        TURNSTILE_SITE_KEY,
+        TURNSTILE_SITE_KEY: env.TURNSTILE_SITE_KEY,
         user: session?.user ? {
             name: session.user.name,
             username: session.user.username,
