@@ -55,7 +55,7 @@
 		"typescript": "^6.0.2",
 		"vite": "^8.0.7",
 		"vitest": "^4.1.6",
-		"wrangler": "^4.81.0"
+		"wrangler": "4.94.0"
 	},
 	"dependencies": {
 		"@sveltejs/adapter-cloudflare": "^7.2.8"
