@@ -61,7 +61,7 @@
         </div>
     </header>
 
-    <div class="bg-sky/5 border-[0.5px] border-sky/18 rounded-md p-5 font-mono font-normal text-[16px] text-mint tracking-[0.15em] leading-[1.85] overflow-x-hidden overflow-y-auto wrap-break-word">{todaysCipher}</div>
+    <div class="bg-sky/5 border-[0.5px] border-sky/18 rounded-md px-5 py-4 font-mono font-normal text-[16px] text-mint tracking-[0.15em] leading-[1.85] overflow-x-hidden overflow-y-auto wrap-break-word">{todaysCipher}</div>
 
 </section>
 
