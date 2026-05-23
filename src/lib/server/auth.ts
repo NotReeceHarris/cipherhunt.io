@@ -83,9 +83,14 @@ const authConfig = {
 							return;
 						}
 
+						console.log(user)
+
 						const githubResponse = await fetch('https://api.github.com/user', {
 							headers: {
-								Authorization: `token ${account.accessToken}`
+								"Authorization": `token ${account.accessToken}`,
+								"Accept": 'application/vnd.github+json',
+								"User-Agent": 'cipherhunt.io (https://cipherhunt.io)',
+								"X-GitHub-Api-Version": "2026-03-10"
 							}
 						}).catch((err) => {
 							console.error('Failed to fetch GitHub user data:', err);
