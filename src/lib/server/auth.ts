@@ -111,7 +111,7 @@ const authConfig = {
 						while (await isUsernameTaken(username)) {
 
 							if (i > 15) {
-								username = `${githubData.login}${(Math.random() * 10000000).toString().substring(2, 8)}`.toLowerCase().trim().replace(/\s+/g, '-');
+								username = `${githubData.login}${Math.random().toString().substring(2, 6)}`.toLowerCase().trim().replace(/\s+/g, '-');
 							} else {
 								username = `${githubData.login}${i}`.toLowerCase().trim().replace(/\s+/g, '-');
 								i++;
@@ -166,10 +166,8 @@ const authConfig = {
 					}
 
 					if (ctx?.params?.id === 'github') {
-						let username = `anonymous${(Math.random() * 10000000).toString().substring(2, 8)}`
-						while (await isUsernameTaken(username)) {
-							username = `anonymous${(Math.random() * 10000000).toString().substring(2, 8)}`
-						}
+						let username = `anonymous${Math.random().toString().substring(2, 6)}`;
+						while (await isUsernameTaken(username)) username = `anonymous${Math.random().toString().substring(2, 6)}`;
 						user.username = user.displayUsername = username;
 					}
 

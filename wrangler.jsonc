@@ -18,5 +18,12 @@
 			"remote": true,
 			"migrations_dir": "drizzle"
 		}
-	]
+	],
+	"observability": {
+		"logs": {
+			"enabled": true,
+			"invocation_logs": true,
+			"persist": false
+		}
+	}
 }
