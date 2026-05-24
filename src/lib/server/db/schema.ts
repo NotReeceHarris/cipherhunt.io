@@ -1,21 +1,13 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { user } from './auth.schema';
 
-export const cipher = sqliteTable('cipher', {
-	id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
-	path: text('path').notNull().unique(),
-	type: text({ enum: ['daily', 'weekly', 'monthly'] }).notNull(),
-	answer: text('answer').notNull(),
-})
-
 export const solved = sqliteTable('solved', {
 	id: text('id')
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
 
 	cipherId: integer('cipher_id').notNull()
-		.notNull()
-		.references(() => cipher.id, { onDelete: "cascade" }),
+		.notNull(),
 		
 	userId: text("user_id")
 		.notNull()

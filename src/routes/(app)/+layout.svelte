@@ -8,10 +8,12 @@
 	import { toast } from 'svelte-sonner'
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
+	import { marked } from 'marked';
+	import guide from '$lib/assets/guide.md?raw';
 
 	let { data, children } = $props();
 
-	let showModal: null | 'leaderboard' | 'archive' | 'login' | 'register' = $state(null);
+	let showModal: null | 'leaderboard' | 'archive' | 'login' | 'register' | 'guide' = $state(null);
 	let key = $state(0);
 	let loading = $state({
 		login: false,
@@ -115,6 +117,7 @@
 
 			<div class="flex gap-5.5 items-center">
 
+				{@render navButton('Guide', 'guide')}
 				{@render navButton('Leaderboard', 'leaderboard')}
 				{@render navButton('Archive', 'archive')}
 
@@ -196,6 +199,10 @@
 						<span>
 							Register
 						</span>
+					{:else if showModal === 'guide'}
+						<span>
+							Guide
+						</span>
 					{/if}
 				</div>
 
@@ -262,6 +269,10 @@
 					</div>
 				</div>
 			{:else if showModal === 'archive'}
+			{:else if showModal === 'guide'}
+				<div class="p-5 overflow-y-auto max-h-[60vh] markdown-body">
+					{@html marked.parse(guide)}
+				</div>
 			{:else if showModal === 'login'}
 				
 				<div class="pt-4.5 px-5.5 pb-5.5 flex flex-col gap-4">
