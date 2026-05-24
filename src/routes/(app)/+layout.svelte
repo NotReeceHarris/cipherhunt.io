@@ -13,7 +13,8 @@
 
 	let { data, children } = $props();
 
-	let showModal: null | 'leaderboard' | 'archive' | 'login' | 'register' | 'guide' = $state(null);
+	let guideHtml = $state(marked.parse(guide));
+	let showModal: null | 'leaderboard' | 'archive' | 'login' | 'register' | 'guide' | 'profile' = $state(null);
 	let key = $state(0);
 	let loading = $state({
 		login: false,
@@ -83,8 +84,9 @@
         if (key || showModal) loadTurnstile();
     })
 
-	onMount(() => {
+	onMount(async () => {
 		loadTurnstile();
+		guideHtml = (await marked.parse(guide)).replaceAll('<a href="', '<a target="_blank" href="')
 	});
 </script>
 
@@ -119,10 +121,10 @@
 
 				{@render navButton('Guide', 'guide')}
 				{@render navButton('Leaderboard', 'leaderboard')}
-				{@render navButton('Archive', 'archive')}
+				<!-- {@render navButton('Archive', 'archive')} -->
 
 				{#if data.user}
-					<button title={data.user.username || data.user.email} class="appearance-none bg-transparent border-medium p-0 font-mono text-[11px] text-muted tracking-[0.04em] uppercase cursor-pointer transition-colors hover:text-text flex items-center gap-2">
+					<button onclick={() => (showModal = 'profile')} title={data.user.username || data.user.email} class="appearance-none bg-transparent border-medium p-0 font-mono text-[11px] text-muted tracking-[0.04em] uppercase cursor-pointer transition-colors hover:text-text flex items-center gap-2">
 						<span class="max-w-25 line-clamp-1 break-all text-ellipsis">
 							{data.user.username || data.user.email}
 						</span>
@@ -199,6 +201,10 @@
 						<span>
 							Register
 						</span>
+					{:else if showModal === 'profile' && data.user}
+						<span>
+							{data.user.username || data.user.email}
+						</span>
 					{:else if showModal === 'guide'}
 						<span>
 							Guide
@@ -269,9 +275,59 @@
 					</div>
 				</div>
 			{:else if showModal === 'archive'}
+			{:else if showModal === 'profile' && data.user}
+				
+				<div class="pt-2 px-5 pb-5 flex flex-col">
+
+					<div class="flex justify-between items-baseline py-3.5 border-b border-border">
+						<span class="font-mono text-[11px] text-muted tracking-widest uppercase">
+							Solves
+						</span>
+						<span class="font-mono text-[14px] text-text">
+							0
+						</span>
+					</div>
+
+					<div class="flex justify-between items-baseline py-3.5 border-b border-border">
+						<span class="font-mono text-[11px] text-muted tracking-widest uppercase">
+							Average time
+						</span>
+						<span class="font-mono text-[14px] text-text">
+							06:21
+						</span>
+					</div>
+
+					<div class="flex justify-between items-baseline py-3.5 border-b border-border">
+						<span class="font-mono text-[11px] text-muted tracking-widest uppercase">
+							current streak
+						</span>
+						<span class="font-mono text-[14px] text-text">
+							9d
+						</span>
+					</div>
+
+					<div class="flex justify-between items-baseline py-3.5">
+						<span class="font-mono text-[11px] text-muted tracking-widest uppercase">
+							best streak
+						</span>
+						<span class="font-mono text-[14px] text-text">
+							21d
+						</span>
+					</div>
+
+					<div class="pt-4.5 flex justify-end">
+						<a href="/api/logout" onclick={()=>{invalidateAll();showModal=null}} class="appearance-none cursor-pointer bg-transparent border-0 p-0 font-mono text-[12px] text-muted tracking-[0.04em]">
+							<span>
+								sign out →
+							</span>
+						</a>
+					</div>
+
+				</div>
+
 			{:else if showModal === 'guide'}
 				<div class="p-5 overflow-y-auto max-h-[60vh] markdown-body">
-					{@html marked.parse(guide)}
+					{@html guideHtml}
 				</div>
 			{:else if showModal === 'login'}
 				

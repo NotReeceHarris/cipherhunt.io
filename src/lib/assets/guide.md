@@ -1,5 +1,3 @@
-# CipherHunt — Solver's Guide
-
 You have one thing: a string of characters. This guide tells you what to do with it.
 
 ---

@@ -103,3 +103,85 @@ main.terms section .content dl div dd {
 .bg-tape {
     background: linear-gradient(rgba(232, 214, 168, 0.22) 0%, rgba(220, 200, 160, 0.18) 50%, rgba(204, 180, 140, 0.16) 100%);clip-path: polygon(6% 0%,94% 0%,97% 18%,92% 38%,96% 62%,91% 82%,95% 100%,4% 100%,7% 78%,2% 56%,8% 32%,3% 14%);
 }
+
+/* markdown body */
+
+.markdown-body {
+    @apply text-text
+}
+
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+    @apply py-4 font-bold
+}
+
+.markdown-body h1 {
+    @apply text-3xl
+}
+
+.markdown-body h2 {
+    @apply text-2xl
+}
+
+.markdown-body h3 {
+    @apply text-xl
+}
+
+.markdown-body h4, .markdown-body h5, .markdown-body h6 {
+    @apply text-lg
+}
+
+.markdown-body h2::before, .markdown-body h3::before, .markdown-body h4::before, .markdown-body h5::before, .markdown-body h6::before {
+    @apply content-['#'] text-muted font-mono tracking-widest uppercase mr-2
+}
+
+.markdown-body p {
+    @apply py-2
+}
+
+.markdown-body a {
+    @apply text-[#dcbb6e] underline underline-offset-2
+}
+
+.markdown-body ul {
+    @apply list-disc list-inside py-2
+}
+
+.markdown-body li:not(:last-child) {
+    @apply pb-2
+}
+
+.markdown-body ol {
+    @apply list-decimal list-inside py-2
+}
+
+.markdown-body code {
+    @apply bg-card text-[#dcbb6e]/90 px-1.5 py-0.5 rounded-sm text-sm font-mono
+}
+
+.markdown-body hr {
+    @apply border-border my-2
+}
+
+.markdown-body blockquote {
+    @apply border-l-4 border-border pl-2 text-muted italic my-4
+}
+
+.markdown-body table {
+    @apply w-full border-collapse my-4 border-[0.5px] border-border bg-card rounded-sm
+}
+
+.markdown-body table th {
+    @apply p-2 border-b-[0.5px] border-border text-left text-sm font-mono text-text/70 uppercase tracking-wider font-normal
+}
+
+.markdown-body table th:first-child {
+    @apply rounded-tl-sm
+}
+
+.markdown-body table th:last-child {
+    @apply rounded-tr-sm
+}
+
+.markdown-body table tr td {
+    @apply p-2 border-b-[0.5px] border-border text-left text-sm text-text
+}
