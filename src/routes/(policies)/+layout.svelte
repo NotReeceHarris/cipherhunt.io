@@ -41,20 +41,17 @@
 <div class="min-h-screen flex flex-col items-center px-5 pb-20">
 	<div class="w-full max-w-270 flex flex-col">
 
-		<nav class="flex justify-between items-center pt-4.5 px-1 pb-5.5 gap-3">
+		<header class="flex items-center justify-between pt-6 pb-8">
 
-			<a href="https://cipherhunt.io" class="font-mono font-medium text-[15px] tracking-[-0.01em] justify-self-start">
-				<span>cipher</span><span class="text-mint">hunt</span><span class="text-muted">.io</span>
+			<a href="https://cipherhunt.io/policies" class="font-mono font-normal text-[13px] tracking-[0.02em]">
+				<span>cipherhunt</span><span class="text-muted">.io/policies</span>
 			</a>
 
-			<a href="/" class="inline-flex items-center gap-[7px] border-[0.5px] border-border rounded-md py-[6px] px-[11px] h-[32px] text-[12px] text-muted font-mono tracking-[0.02em] bg-transparent cursor-pointer decoration-none hover:text-text">
-				<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 6l-6 6 6 6"></path><path d="M5 12h14"></path></svg>
-				back to cipher
+			<a href="/" class="appearance-none bg-transparent border-medium p-0 font-mono text-[11px] text-muted tracking-[0.04em] uppercase cursor-pointer transition-colors hover:text-text">
+				<span>back to cipher</span>
 			</a>
 
-		</nav>
-
-		<div class="h-[0.5px] bg-border mb-6 -mx-5"></div>
+		</header>
 
 		<main class="flex flex-col gap-5.5">
 			{@render children()}

@@ -9,6 +9,8 @@ declare global {
 			user?: User;
 			session?: Session;
 			auth: ReturnType<typeof createAuth>;
+			db: D1Database;
+			caches: CacheStorage;
 		}
 
 		interface Platform {
