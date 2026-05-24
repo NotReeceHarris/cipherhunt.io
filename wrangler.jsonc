@@ -2,7 +2,9 @@
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "cipherhunt-io",
 	"compatibility_date": "2026-05-19",
-	"compatibility_flags": ["nodejs_als"],
+	"compatibility_flags": [
+		"nodejs_als"
+	],
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	"assets": {
 		"binding": "ASSETS",
@@ -25,5 +27,12 @@
 			"invocation_logs": true,
 			"persist": false
 		}
-	}
+	},
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "ad5d89ae3e8f4ee8a9697a39071362fb",
+			"remote": true
+		}
+	]
 }

@@ -10,7 +10,7 @@ const handleBetterAuth: Handle = async ({ event, resolve }) => {
 
 	event.locals.auth = createAuth(event.platform.env.DB);
 	event.locals.db = event.platform.env.DB;
-	event.locals.caches = event.platform.caches;
+	event.locals.kv = event.platform.env.KV;
 
 	const { auth } = event.locals;
 	const session = await auth.api.getSession({ headers: event.request.headers });

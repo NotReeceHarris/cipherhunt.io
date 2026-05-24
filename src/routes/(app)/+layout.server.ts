@@ -4,7 +4,7 @@ import { user } from '$lib/server/db/auth.schema';
 import { solved } from '$lib/server/db/schema';
 import { count, eq, desc, sql } from 'drizzle-orm';
 
-let leaderboard: { topSolvers: {username: string|null;solved: number;avg: number;streak: number;}[]; topAvg: {username: string|null;solved: number;avg: number;streak: number;}[] } | null = null;
+let EDGE_CACHE: any = null;
 
 export const load = async ({ locals, request }) => {
     
@@ -12,57 +12,71 @@ export const load = async ({ locals, request }) => {
         headers: request.headers
     })
 
+    let leaderboard = EDGE_CACHE;
+
     if (!leaderboard) {
+        const kv_cache = await locals.kv.get('leaderboard', {
+            type: 'json'
+        });
 
-        const db = getDb(locals.db);
+        if (!kv_cache) {
 
-        const topSolvers = await db.select({
-            username: user.username,
-            solved: count(solved.id),
-            avg: sql<number>`AVG(solved.solvedAt - solved.cipherStartDate)`.as('avg'),
-            streak: sql<number>`(SELECT COUNT(DISTINCT cipherDuration) FROM (
-                                SELECT DISTINCT cipherDuration, DATE(solvedAt / 1000, 'unixepoch') as solvedDate
-                                FROM solved s2 WHERE s2.user_id = solved.user_id
-                                AND s2.solvedAt >= DATE('now', '-30 days')
-                                ORDER BY s2.solvedAt DESC
-                                ))`.as('streak'),
-        }).from(solved)
+            const db = getDb(locals.db);
+
+            const topSolvers = await db.select({
+                username: user.username,
+                solved: count(solved.id),
+                avg: sql<number>`AVG(solved.solvedAt - solved.cipherStartDate)`.as('avg'),
+                streak: sql<number>`(SELECT COUNT(DISTINCT cipherDuration) FROM (
+                                    SELECT DISTINCT cipherDuration, DATE(solvedAt / 1000, 'unixepoch') as solvedDate
+                                    FROM solved s2 WHERE s2.user_id = solved.user_id
+                                    AND s2.solvedAt >= DATE('now', '-30 days')
+                                    ORDER BY s2.solvedAt DESC
+                                    ))`.as('streak'),
+            }).from(solved)
+                .innerJoin(user, eq(solved.userId, user.id))
+                .groupBy(solved.userId)
+                .orderBy(desc(count(solved.id)))
+                .limit(10)
+            .catch((e) => {
+                console.error('Error fetching top solvers:', e);
+                return [];
+            });
+
+            const topAvg = await db.select({
+                username: user.username,
+                solved: count(solved.id),
+                avg: sql<number>`AVG(solved.solvedAt - solved.cipherStartDate)`.as('avg'),
+                streak: sql<number>`(SELECT COUNT(DISTINCT cipherDuration) FROM (
+                                    SELECT DISTINCT cipherDuration, DATE(solvedAt / 1000, 'unixepoch') as solvedDate
+                                    FROM solved s2 WHERE s2.user_id = solved.user_id
+                                    AND s2.solvedAt >= DATE('now', '-30 days')
+                                    ORDER BY s2.solvedAt DESC
+                                    ))`.as('streak'),
+            }).from(solved)
             .innerJoin(user, eq(solved.userId, user.id))
-            .groupBy(solved.userId)
-            .orderBy(desc(count(solved.id)))
-            .limit(10)
-        .catch((e) => {
-            console.error('Error fetching top solvers:', e);
-            return [];
-        });
+                .groupBy(solved.userId)
+                .orderBy(desc(sql`AVG(solved.solvedAt - solved.cipherStartDate)`))
+                .limit(10)
+            .catch((e) => {
+                console.error('Error fetching top average solvers:', e);
+                return [];
+            });
 
-        const topAvg = await db.select({
-            username: user.username,
-            solved: count(solved.id),
-            avg: sql<number>`AVG(solved.solvedAt - solved.cipherStartDate)`.as('avg'),
-            streak: sql<number>`(SELECT COUNT(DISTINCT cipherDuration) FROM (
-                                SELECT DISTINCT cipherDuration, DATE(solvedAt / 1000, 'unixepoch') as solvedDate
-                                FROM solved s2 WHERE s2.user_id = solved.user_id
-                                AND s2.solvedAt >= DATE('now', '-30 days')
-                                ORDER BY s2.solvedAt DESC
-                                ))`.as('streak'),
-        }).from(solved)
-        .innerJoin(user, eq(solved.userId, user.id))
-            .groupBy(solved.userId)
-            .orderBy(desc(sql`AVG(solved.solvedAt - solved.cipherStartDate)`))
-            .limit(10)
-        .catch((e) => {
-            console.error('Error fetching top average solvers:', e);
-            return [];
-        });
+            leaderboard = EDGE_CACHE = {
+                topSolvers,
+                topAvg
+            };
 
-        leaderboard = {
-            topSolvers,
-            topAvg
-        };
+            console.log('Caching leaderboard in KV');
+            await locals.kv.put('leaderboard', JSON.stringify(leaderboard), { expirationTtl: 60 * 60 }); // Cache for 1 hour
 
+        } else {
+            console.log('Using KV cache for leaderboard');
+            leaderboard = EDGE_CACHE = kv_cache;
+        }
     } else {
-        console.log('Using cached leaderboard data');
+        console.log('Using EDGE_CACHE for leaderboard');
     }
 
     return {

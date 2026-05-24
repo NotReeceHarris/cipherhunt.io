@@ -10,13 +10,12 @@ declare global {
 			session?: Session;
 			auth: ReturnType<typeof createAuth>;
 			db: D1Database;
-			caches: CacheStorage;
+			kv: KVNamespace;
 		}
 
 		interface Platform {
 			env: Env;
 			ctx: ExecutionContext;
-			caches: CacheStorage;
 			cf?: IncomingRequestCfProperties;
 		}
 
