@@ -103,7 +103,7 @@
 {/snippet}
 
 {#snippet tabButton(title: string = 'Navigation Button', href: string = '#', route: typeof page.route.id = null)}
-	<a href={href} class="appearance-none cursor-pointer bg-transparent border {page.route.id === route ? 'border-text text-text' : 'border-border text-muted'} rounded-xs py-1.75 px-3.25 font-mono font-normal text-[11px] tracking-wider inline-flex items-center gap-1.75 transition-colors hover:border-border-strong hover:text-text">
+	<a href={href} class="appearance-none cursor-pointer bg-transparent border {page.route.id === route ? 'border-text text-text' : 'border-border text-muted hover:border-border-strong hover:text-text'} rounded-xs py-1.75 px-3.25 font-mono font-normal text-[11px] tracking-wider inline-flex items-center gap-1.75 transition-colors">
 		<span>{title}</span>
 	</a>
 {/snippet}
