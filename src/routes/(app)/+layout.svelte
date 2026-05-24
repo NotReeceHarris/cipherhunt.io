@@ -18,6 +18,7 @@
 		register: false
 	});
 
+	let leaderboardView: 'solves' | 'avg' = $state('solves');
 	let leaderboard = $derived(data.leaderboard.topSolvers.map((user)=>{
 		return {
 			username: user.username,
@@ -26,6 +27,26 @@
 			streak: user.streak
 		}
 	}))
+
+	$effect(() => {
+		leaderboard = leaderboardView === 'solves' 
+			? data.leaderboard.topSolvers.map((user)=>{
+				return {
+					username: user.username,
+					avg: moment.utc(moment.duration(user.avg, 'milliseconds').asMilliseconds()).format('HH:mm:ss'),
+					solves: user.solved,
+					streak: user.streak
+				}
+			})
+			: data.leaderboard.topAvg.map((user)=>{
+				return {
+					username: user.username,
+					avg: moment.utc(moment.duration(user.avg, 'milliseconds').asMilliseconds()).format('HH:mm:ss'),
+					solves: user.solved,
+					streak: user.streak
+				}
+			})
+	})
 
 	async function loadTurnstile() {
 
@@ -186,21 +207,22 @@
 			</div>
 
 			{#if showModal === 'leaderboard'}
-				<div class="pt-3.5 px-4.5 pb-2.5 flex justify-between items-baseline">
-					<div class="text-[13px] text-text">
-						<span class="text-[13px] text-text">
-							Today's Top Solvers
-						</span>
-					</div>
-					<div class="text-[11px] text-muted">
-						<span>
-							Sorted by attempts · then time
-						</span>
+				<div class="py-3.5 px-5 border-t-[0.5px] border-border flex justify-between items-center gap-4">
+					<span class="font-mono text-[10px] text-muted tracking-[0.12em] uppercase">
+						top 10 · all tracks
+					</span>
+					<div class="flex items-center gap-4">
+						<button onclick={() => leaderboardView = 'solves'} class="appearance-none cursor-pointer bg-transparent border-0 border-b {leaderboardView === 'solves' ? 'text-text border-text' : 'border-transparent text-muted'} py-1 font-mono text-[11px] tracking-[0.06em] hover:text-text">
+							most solves
+						</button>
+						<button onclick={() => leaderboardView = 'avg'} class="appearance-none cursor-pointer bg-transparent border-0 border-b {leaderboardView === 'avg' ? 'text-text border-text' : 'border-transparent text-muted'} py-1 font-mono text-[11px] tracking-[0.06em] hover:text-text">
+							fastest avg
+						</button>
 					</div>
 				</div>
 
 				<div class="pt-0">
-					<div class="grid grid-cols-[40px_1fr_70px_80px_60px] px-5 py-3 text-[10px] tracking-[0.08em] uppercase text-muted font-mono border-b-[0.5px] border-border">
+					<div class="grid grid-cols-[40px_1fr_70px_80px_60px] px-5 py-3 text-[10px] tracking-[0.08em] uppercase text-muted font-mono border-y-[0.5px] border-border">
 						<span>
 							#
 						</span>
@@ -219,7 +241,7 @@
 					</div>
 					<div class="max-h-[46vh] overflow-y-auto mt-0">
 						{#each leaderboard as user, i}
-							<div class="grid grid-cols-[40px_1fr_70px_80px_60px] px-5 py-3 border-b-[0.5px] border-border bg-transparent items-center">
+							<div class="grid grid-cols-[40px_1fr_70px_80px_60px] px-5 py-3 {i!=leaderboard.length-1 ? 'border-b-[0.5px] border-border': ''} bg-transparent items-center">
 								<span class="text-muted font-mono text-[12px]">
 									{(i + 1).toString().padStart(2, '0')}
 								</span>
