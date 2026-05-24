@@ -8,8 +8,6 @@ export default async function getPuzzle(date: Date, type: 'daily' | 'weekly' | '
 
     const url = API_URL.replace('{}', id);
 
-    console.log(url)
-
     const response = await fetch(url, {
         headers: {
             'Accept': 'application/vnd.github.v3.raw',

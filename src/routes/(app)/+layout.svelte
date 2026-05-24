@@ -50,7 +50,7 @@
 
 	async function loadTurnstile() {
 
-		const existing = document.querySelector('#cf-turnstile');
+		const existing = document.querySelector('#cf-turnstile-auth');
 		if (!existing) return;
 
         let attempts = 0;
@@ -65,7 +65,7 @@
             attempts++;
         }
 
-        turnstile.render('#cf-turnstile', {
+        turnstile.render('#cf-turnstile-auth', {
             sitekey: data.TURNSTILE_SITE_KEY,
             theme: 'dark',
             size: 'flexible',
@@ -74,7 +74,7 @@
             }
         });
 
-		document.querySelectorAll('#cf-turnstile')?.forEach(el => el.classList.remove('animate-pulse'));
+		document.querySelectorAll('#cf-turnstile-auth')?.forEach(el => el.classList.remove('animate-pulse'));
     }
 
 	$effect(() => {
@@ -329,7 +329,7 @@
 						</label>
 
 						{#key `${showModal}${key}`}
-							<div id="cf-turnstile" class="w-full h-16.25 bg-card border-[0.5px] border-border-strong rounded-xs animate-pulse"></div>
+							<div id="cf-turnstile-auth" class="w-full h-16.25 bg-card border-[0.5px] border-border-strong rounded-xs animate-pulse"></div>
 						{/key}
 
 						<button class="mt-2 appearance-none cursor-pointer w-full bg-card border-[0.5px] border-border-strong rounded-xs py-2.75 px-3.5 text-text text-[13px] font-medium inline-flex items-center justify-center gap-2.5 transition-colors">
@@ -434,7 +434,7 @@
 						</label>
 
 						{#key `${showModal}${key}`}
-							<div id="cf-turnstile" class="w-full h-16.25 bg-card border-[0.5px] border-border-strong animate-pulse rounded-xs"></div>
+							<div id="cf-turnstile-auth" class="w-full h-16.25 bg-card border-[0.5px] border-border-strong animate-pulse rounded-xs"></div>
 						{/key}
 
 						<button class="appearance-none cursor-pointer w-full bg-card border-[0.5px] border-border-strong rounded-xs py-2.75 px-3.5 text-text text-[13px] font-medium inline-flex items-center justify-center gap-2.5 transition-colors">

@@ -3,11 +3,15 @@
     import moment from 'moment';
     import { onMount, onDestroy } from 'svelte';
     import { between } from '$lib/utils/random';
+	import { enhance } from '$app/forms';
+	import { goto, invalidateAll } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 
     const { data } = $props();
     let answer: string = $state('');
     let key: number = $state(0);
     let interval: NodeJS.Timeout | null = $state(null);
+    let captchaKey: number = $state(0);
 
     let cipherId = data.puzzle.id;
     let cipher = data.puzzle.ciphertext;
@@ -15,12 +19,45 @@
     let avgTime = '14:08';
     let firstSolver = 'cryptic_carl';
 
+    async function loadTurnstile() {
+
+		const existing = document.querySelector('#cf-turnstile-submit');
+		if (!existing) return;
+
+        let attempts = 0;
+        let turnstile: any = null;
+        
+        while (attempts < 10) {
+            if (window['turnstile']) {
+                turnstile = window['turnstile'];
+                break;
+            }
+            await new Promise(resolve => setTimeout(resolve, 500));
+            attempts++;
+        }
+
+        turnstile.render('#cf-turnstile-submit', {
+            sitekey: data.TURNSTILE_SITE_KEY,
+            theme: 'dark',
+            size: 'flexible',
+            appearance: 'interaction-only',
+            callback: function(token) {
+                console.log('Success:', token);
+            }
+        });
+    }
+
+	$effect(() => {
+        if (captchaKey) loadTurnstile();
+    })
+
     $effect(() => {
         answer = answer.toLowerCase();
     });
 
     onMount(async () => {
         interval = setInterval(() => key = key === 1 ? 0 : 1, 1000);
+        loadTurnstile();
     })
 
     onDestroy(() => {
@@ -53,10 +90,10 @@
 
 </div>
 
-<div class="flex flex-col gap-3 pt-1.5">
+<div class="flex flex-col gap-3">
 
     {#if !data.user}
-        <div class="pt-0.5 font-sans font-light text-[13px] text-muted leading-normal">
+        <div class="font-sans font-light text-[13px] text-muted leading-normal">
             <span>Solves count toward the leaderboard once you</span>
             <button class="appearance-none cursor-pointer bg-transparent border-b border-border-strong p-0 text-text">
                 sign in
@@ -65,7 +102,31 @@
         </div>
     {/if}
 
-    <div class="flex flex-col gap-2">
+    <form class="flex flex-col gap-2" method="POST" use:enhance={async () => {
+        return async ({ result }) => {
+
+            captchaKey++
+
+            if (result.type === "success") {
+                toast.success('Correct! Your solve has been submitted.')
+                await invalidateAll()
+            } else if (result.type === "error") {
+                toast.error(result.error.message || 'An error occurred while creating your account.')
+                await invalidateAll()
+            } else if (result.type === "redirect") {
+                toast.info('Redirecting...')
+                await goto(result.location)
+            } else {
+                toast.error('An unexpected response was received.')
+                console.warn('Unexpected response:', result)
+            }
+
+        }
+    }}>
+
+        {#key captchaKey}
+            <div id="cf-turnstile-submit" class="w-full max-h-16.25 bg-card rounded-xs"></div>
+        {/key}
 
         <div class="flex items-center gap-2 bg-surface border border-border rounded-xs px-4.5">
             <input type="text" name="decoded" id="decoded" bind:value={answer} placeholder="type the decoded plaintext..." class="flex-[1_1_0%] min-w-0 appearance-none outline-none border-0 bg-transparent py-4 font-mono font-normal text-[14px] text-text tracking-[0.02em]">
@@ -78,7 +139,7 @@
             <span>↵ enter to submit · case-insensitive</span>
         </div>
 
-    </div>
+    </form>
 
 </div>
 
