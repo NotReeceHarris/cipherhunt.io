@@ -4,16 +4,16 @@
     import { onMount, onDestroy } from 'svelte';
     import { between } from '$lib/utils/random';
 
-    let cipherId = 142;
-    let cipher = '7z6w73357z48596u415346747644707478444z747743556y7962596u415346747z6w7331796259677644517252546u6z7844736z52546y6u525377317z725934784473307744743w';
-    let solvers = 32;
-    let avgTime = '10:34:23';
-    let firstSolver = 'puzzling_piper';
-
     const { data } = $props();
     let answer: string = $state('');
     let key: number = $state(0);
     let interval: NodeJS.Timeout | null = $state(null);
+
+    let cipherId = data.puzzle.id;
+    let cipher = data.puzzle.ciphertext;
+    let solvers = 8732;
+    let avgTime = '14:08';
+    let firstSolver = 'cryptic_carl';
 
     $effect(() => {
         answer = answer.toLowerCase();
