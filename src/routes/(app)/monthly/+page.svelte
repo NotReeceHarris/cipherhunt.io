@@ -6,6 +6,7 @@
 	import { enhance } from '$app/forms';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
+    import { formatDuration } from '$lib/utils/time';
 
     const { data } = $props();
     let answer: string = $state('');
@@ -13,11 +14,10 @@
     let interval: NodeJS.Timeout | null = $state(null);
     let captchaKey: number = $state(0);
 
-    let cipherId = data.puzzle.id;
-    let cipher = data.puzzle.ciphertext;
-    let solvers = 8732;
-    let avgTime = '14:08';
-    let firstSolver = 'cryptic_carl';
+    let cipher = $derived(data.puzzle.ciphertext || 'Unable to load puzzle.');
+    let solvers = $derived(data.stats.solvedCount || 0);
+    let avgTime = $derived(formatDuration(data.stats.avgTime || 0));
+    let firstSolver = $derived(data.stats.firstSolver || 'Unsolved');
 
     async function loadTurnstile() {
 
@@ -167,9 +167,15 @@
         <span class="font-mono text-[11px] text-muted tracking-[0.12em] uppercase">
             First to solve
         </span>
-        <span class="font-mono text-[16px] font-normal text-text tracking-[0.02em] line-clamp-1 wrap-break-word text-ellipsis overflow-hidden">
-            {firstSolver}
-        </span>
+        {#if solvers === 0}
+            <span class="font-mono text-[16px] font-normal text-text/70 tracking-[0.02em] line-clamp-1 wrap-break-word text-ellipsis overflow-hidden">
+                unsolved
+            </span>
+        {:else}
+            <span class="font-mono text-[16px] font-normal text-text tracking-[0.02em] line-clamp-1 wrap-break-word text-ellipsis overflow-hidden">
+                {firstSolver}
+            </span>
+        {/if}
     </div>
 
 </div>

@@ -1,3 +1,19 @@
+function startOfWeekMondayUTC(date: Date): Date {
+    const day = date.getUTCDay(); // 0 = Sunday ... 6 = Saturday
+
+    // convert Sunday (0) → 6, Monday → 0, etc.
+    const diff = (day === 0 ? -6 : 1 - day);
+
+    const monday = new Date(date);
+    monday.setUTCDate(date.getUTCDate() + diff);
+
+    return new Date(Date.UTC(
+        monday.getUTCFullYear(),
+        monday.getUTCMonth(),
+        monday.getUTCDate()
+    ));
+}
+
 export default function generateId(
     inputDate: Date,
     type: "daily" | "weekly" | "monthly"
@@ -47,20 +63,25 @@ export default function generateId(
     const id = TYPE_BUCKET * MULTIPLIER + safeIndex;
 
     return id.toString();
+}
+
+export function puzzleStartDate(
+    inputDate: Date,
+    type: "daily" | "weekly" | "monthly"
+): Date {
+    const date = new Date(inputDate);
+
+    // normalise to UTC midnight first
+    let normalised = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+
+    if (type === "weekly") {
+        return startOfWeekMondayUTC(normalised);
     }
 
-    function startOfWeekMondayUTC(date: Date): Date {
-    const day = date.getUTCDay(); // 0 = Sunday ... 6 = Saturday
+    if (type === "monthly") {
+        return new Date(Date.UTC(normalised.getUTCFullYear(), normalised.getUTCMonth(), 1));
+    }
 
-    // convert Sunday (0) → 6, Monday → 0, etc.
-    const diff = (day === 0 ? -6 : 1 - day);
-
-    const monday = new Date(date);
-    monday.setUTCDate(date.getUTCDate() + diff);
-
-    return new Date(Date.UTC(
-        monday.getUTCFullYear(),
-        monday.getUTCMonth(),
-        monday.getUTCDate()
-    ));
+    // Daily
+    return normalised;
 }

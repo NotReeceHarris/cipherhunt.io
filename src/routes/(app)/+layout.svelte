@@ -13,6 +13,7 @@
 
 	let { data, children } = $props();
 
+	let pageLoading: 'daily' | 'weekly' | 'monthly' | null = $state(null);
 	let guideHtml = $state(marked.parse(guide));
 	let showModal: null | 'leaderboard' | 'archive' | 'login' | 'register' | 'guide' | 'profile' = $state(null);
 	let key = $state(0);
@@ -103,9 +104,19 @@
 {/snippet}
 
 {#snippet tabButton(title: string = 'Navigation Button', href: string = '#', route: typeof page.route.id = null)}
-	<a href={href} class="appearance-none cursor-pointer bg-transparent border {page.route.id === route ? 'border-text text-text' : 'border-border text-muted hover:border-border-strong hover:text-text'} rounded-xs py-1.75 px-3.25 font-mono font-normal text-[11px] tracking-wider inline-flex items-center gap-1.75 transition-colors">
+	<button onclick={async () => {
+		if (!!pageLoading) return;
+		pageLoading = title as unknown as typeof pageLoading;
+		await goto(href);
+		pageLoading = null;
+	}} class="relative flex place-items-center justify-center appearance-none cursor-pointer bg-transparent border {page.route.id === route ? 'border-text text-text' : 'border-border text-muted hover:border-border-strong hover:text-text'} rounded-xs py-1.75 px-3.25 font-mono font-normal text-[11px] tracking-wider inline-flex items-center gap-1.75 transition-colors">
+		{#if title === pageLoading}
+			<div class="absolute inset-0 flex items-center justify-center bg-bg z-10 w-full h-full">
+				<svg class="absolute text-white size-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+			</div>
+		{/if}
 		<span>{title}</span>
-	</a>
+	</button>
 {/snippet}
 
 <div class="min-h-screen flex flex-col items-center px-5">
