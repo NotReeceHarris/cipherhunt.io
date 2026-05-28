@@ -97,11 +97,12 @@ export const load = async ({ locals }) => {
         stats: {
             solvedCount: stats?.solvedCount || 0,
             avgTime: stats.avgTime || 0,
-            firstSolver: stats.firstSolver || 'Unsolved'
+            firstSolver: stats.firstSolver || 'Unsolved',
         },
         puzzle: {
             id: puzzle?.id || 'unknown',
-            ciphertext: puzzle?.ciphertext || 'Unable to load puzzle.'
+            ciphertext: puzzle?.ciphertext || 'Unable to load puzzle.',
+            hint: puzzle?.design,
         }
     };
 

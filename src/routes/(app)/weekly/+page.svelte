@@ -8,6 +8,7 @@
 	import { toast } from 'svelte-sonner';
     import { formatDuration } from '$lib/utils/time';
     import { getContext } from 'svelte';
+    import { splitIntoParagraphs } from '$lib/utils/typography';
 
     const { data } = $props();
     let answer: string = $state('');
@@ -16,9 +17,13 @@
     let captchaKey: number = $state(0);
 
     let cipher = $derived(data.puzzle.ciphertext || 'Unable to load puzzle.');
+    let hint = $derived(data.puzzle.hint || 'No hint available.');
+
     let solvers = $derived(data.stats.solvedCount || 0);
     let avgTime = $derived(formatDuration(data.stats.avgTime || 0));
     let firstSolver = $derived(data.stats.firstSolver || 'Unsolved');
+
+    let showHintModal: boolean = $state(false);
 
     const loginModal = getContext<{
 		open: boolean;
@@ -148,6 +153,16 @@
 
     </form>
 
+    <div class="font-sans font-light text-[13px] text-muted leading-normal mt-3">
+        <span>
+            Need a hint? The hint won't give away the solution, but it may help nudge you in the right direction.
+        </span>
+        <button onclick={() => showHintModal = true} class="appearance-none cursor-pointer bg-transparent border-b border-border-strong p-0 text-text">
+            Show hint
+        </button>
+        <span>.</span>
+    </div>
+
 </div>
 
 <div class="grid grid-cols-3 border-y border-border gap-x-6 mt-auto">
@@ -186,3 +201,39 @@
     </div>
 
 </div>
+
+{#if showHintModal}
+    <div class="w-screen h-screen top-0 left-0 fixed inset-0 z-1000 flex items-center justify-center p-6">
+		<button onclick={() => showHintModal = false} class="w-screen h-screen top-0 left-0 fixed inset-0 bg-[rgba(20,20,20,0.62)] backdrop-blur-sm">
+			<span class="sr-only">close modal</span>
+		</button>
+
+		<div style="animation: modal-in .25s ease-out both;" class="w-full max-w-130 bg-surface border-[0.5px] border-border rounded-xs max-h-[calc(100vh-48px)] flex flex-col overflow-hidden">
+
+			<div class="flex items-center justify-between py-4 px-4.5 border-b-[0.5px] border-border">
+				
+				<div class="text-[11px] font-normal tracking-widest uppercase text-muted">
+					<span>
+                        Hint
+                    </span>
+				</div>
+
+				<button onclick={() => showHintModal = false} class="hover:text-text text-muted appearance-none bg-transparent border-[0.5px] border-border rounded-xs size-7 inline-flex items-center justify-center cursor-pointer">
+					<span class="sr-only">close modal</span>
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; flex-shrink: 0;" data-om-id="jsx:/https:/cf29dfbe-6a21-46d5-bcff-383c3e39d5bb.claudeusercontent.com/v1/design/projects/cf29dfbe-6a21-46d5-bcff-383c3e39d5bb/serve/app.jsx:335:9:3"><path d="M6 6l12 12M18 6L6 18" data-om-id="jsx:/https:/cf29dfbe-6a21-46d5-bcff-383c3e39d5bb.claudeusercontent.com/v1/design/projects/cf29dfbe-6a21-46d5-bcff-383c3e39d5bb/serve/app.jsx:1658:43:5"></path></svg>
+				</button>
+
+			</div>
+
+			<div class="p-5 overflow-y-auto max-h-[60vh] markdown-body">
+                {#each splitIntoParagraphs(hint) as  paragraph}
+                    <p class="text-text text-[14px] font-normal tracking-[0.02em] mb-2 last:mb-0">
+                        {paragraph}
+                    </p>
+                {/each}
+            </div>
+
+		</div>
+
+	</div>
+{/if}

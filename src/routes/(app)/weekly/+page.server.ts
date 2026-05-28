@@ -101,7 +101,8 @@ export const load = async ({ locals }) => {
         },
         puzzle: {
             id: puzzle?.id || 'unknown',
-            ciphertext: puzzle?.ciphertext || 'Unable to load puzzle.'
+            ciphertext: puzzle?.ciphertext || 'Unable to load puzzle.',
+            hint: puzzle?.design,
         }
     };
 
