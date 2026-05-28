@@ -7,6 +7,7 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
     import { formatDuration } from '$lib/utils/time';
+    import { getContext } from 'svelte';
 
     const { data } = $props();
     let answer: string = $state('');
@@ -18,6 +19,12 @@
     let solvers = $derived(data.stats.solvedCount || 0);
     let avgTime = $derived(formatDuration(data.stats.avgTime || 0));
     let firstSolver = $derived(data.stats.firstSolver || 'Unsolved');
+
+    const loginModal = getContext<{
+		open: boolean;
+		openModal: () => void;
+		closeModal: () => void;
+	}>('login_modal');
 
     async function loadTurnstile() {
 
@@ -95,7 +102,7 @@
     {#if !data.user}
         <div class="font-sans font-light text-[13px] text-muted leading-normal">
             <span>Solves count toward the leaderboard once you</span>
-            <button class="appearance-none cursor-pointer bg-transparent border-b border-border-strong p-0 text-text">
+            <button onclick={loginModal.openModal} class="appearance-none cursor-pointer bg-transparent border-b border-border-strong p-0 text-text">
                 sign in
             </button>
             <span>.</span>

@@ -10,6 +10,7 @@
 	import { page } from '$app/state';
 	import { marked } from 'marked';
 	import guide from '$lib/assets/guide.md?raw';
+	import { setContext } from 'svelte';
 
 	let { data, children } = $props();
 
@@ -31,6 +32,14 @@
 			streak: user.streak
 		}
 	}))
+
+	setContext('login_modal', {
+		get open() {
+			return showModal === 'login'
+		},
+		openModal: () => showModal = 'login',
+		closeModal: () => showModal = null
+	});
 
 	$effect(() => {
 		leaderboard = leaderboardView === 'solves' 
@@ -285,7 +294,6 @@
 						{/each}
 					</div>
 				</div>
-			{:else if showModal === 'archive'}
 			{:else if showModal === 'profile' && data.user}
 				
 				<div class="pt-2 px-5 pb-5 flex flex-col">
@@ -295,7 +303,7 @@
 							Solves
 						</span>
 						<span class="font-mono text-[14px] text-text">
-							0
+							coming soon
 						</span>
 					</div>
 
@@ -304,7 +312,7 @@
 							Average time
 						</span>
 						<span class="font-mono text-[14px] text-text">
-							06:21
+							coming soon
 						</span>
 					</div>
 
@@ -313,7 +321,7 @@
 							current streak
 						</span>
 						<span class="font-mono text-[14px] text-text">
-							9d
+							coming soon
 						</span>
 					</div>
 
@@ -322,7 +330,7 @@
 							best streak
 						</span>
 						<span class="font-mono text-[14px] text-text">
-							21d
+							coming soon
 						</span>
 					</div>
 
